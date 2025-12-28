@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:salon_booking_app/core/theme/app_theme.dart';
 import 'package:salon_booking_app/features/auth/screens/login_screen.dart';
 
@@ -16,18 +17,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<Map<String, String>> _onboardingData = [
     {
       "image": "assets/onboarding/onboarding1.jpg",
-      "title": "Welcome to Salon",
-      "description": "Experience the best beauty services at your fingertips.",
+      "title": "Elegance Redefined",
+      "description": "Discover a world where beauty meets sophistication.",
     },
     {
       "image": "assets/onboarding/onboarding2.jpg",
-      "title": "Expert Stylists",
-      "description": "Book appointments with top-rated professionals.",
+      "title": "Expert Care",
+      "description": "Our professionals are dedicated to your perfect look.",
     },
     {
       "image": "assets/onboarding/onboarding3.jpg",
-      "title": "Relax & Rejuvenate",
-      "description": "Treat yourself to a day of pampering and care.",
+      "title": "Your Time to Shine",
+      "description": "Book your appointment and let us pamper you.",
     },
   ];
 
@@ -53,50 +54,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
           ),
           Positioned(
-            bottom: 50,
+            bottom: 0,
             left: 0,
             right: 0,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    _onboardingData.length,
-                    (index) => _buildDot(index: index),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                if (_currentPage == _onboardingData.length - 1)
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 15,
-                      ),
-                    ),
-                    child: const Text(
-                      "Get Started",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+            child: _buildBottomPanel(),
           ),
         ],
       ),
@@ -105,55 +66,115 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _buildPage(
       {required String image, required String title, required String description}) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(image),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(
+          image,
           fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.3),
-            BlendMode.darken,
+        ),
+        // Gradient Overlay for readability
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withOpacity(0.1),
+                Colors.transparent,
+                Colors.black.withOpacity(0.6),
+                Colors.black.withOpacity(0.9),
+              ],
+              stops: const [0.0, 0.4, 0.8, 1.0],
+            ),
           ),
         ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(flex: 2),
-          Text(
-            title,
-            style: AppTheme.lightTheme.textTheme.displayLarge?.copyWith(
-              color: Colors.white,
-              shadows: [
-                const Shadow(
-                  offset: Offset(0, 2),
-                  blurRadius: 4.0,
-                  color: Colors.black45,
-                ),
-              ],
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Text(
-              description,
-              style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
-                color: Colors.white.withOpacity(0.9),
-                fontSize: 18,
-                shadows: [
-                  const Shadow(
-                    offset: Offset(0, 1),
-                    blurRadius: 2.0,
-                    color: Colors.black45,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               FadeInUp(
+                 duration: const Duration(milliseconds: 600),
+                 child: Text(
+                  title,
+                  style: AppTheme.lightTheme.textTheme.displayLarge?.copyWith(
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        offset: const Offset(0, 2),
+                        blurRadius: 4.0,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              textAlign: TextAlign.center,
+                           ),
+               ),
+              const SizedBox(height: 15),
+               FadeInUp(
+                delay: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 600),
+                 child: Text(
+                  description,
+                  style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300,
+                  ),
+                           ),
+               ),
+              const SizedBox(height: 100), // Space for bottom controls
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBottomPanel() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: List.generate(
+              _onboardingData.length,
+              (index) => _buildDot(index: index),
             ),
           ),
-          const Spacer(),
+          FadeInRight(
+            duration: const Duration(milliseconds: 500),
+            key: ValueKey(_currentPage), // Triggers animation on change
+            child: ElevatedButton(
+              onPressed: () {
+                if (_currentPage < _onboardingData.length - 1) {
+                  _pageController.nextPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+                backgroundColor: AppTheme.primaryColor, 
+                foregroundColor: Colors.white,
+              ),
+              child: Icon(
+                 _currentPage == _onboardingData.length - 1 ? Icons.check : Icons.arrow_forward,
+                 size: 28,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -161,13 +182,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _buildDot({required int index}) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.symmetric(horizontal: 5),
-      height: 10,
-      width: _currentPage == index ? 20 : 10,
+      duration: const Duration(milliseconds: 300),
+      margin: const EdgeInsets.only(right: 8),
+      height: 8,
+      width: _currentPage == index ? 30 : 8,
       decoration: BoxDecoration(
-        color: _currentPage == index ? AppTheme.primaryColor : Colors.white,
-        borderRadius: BorderRadius.circular(5),
+        color: _currentPage == index ? AppTheme.primaryColor : Colors.white.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(4),
       ),
     );
   }

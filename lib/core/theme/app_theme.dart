@@ -19,36 +19,52 @@ class AppTheme {
         surface: surfaceColor,
       ),
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.playfairDisplay(
+        displayLarge: GoogleFonts.cormorantGaramond(
+          fontSize: 40,
+          fontWeight: FontWeight.bold,
+          color: textColor,
+          height: 1.1,
+        ),
+        displayMedium: GoogleFonts.cormorantGaramond(
           fontSize: 32,
           fontWeight: FontWeight.bold,
           color: textColor,
         ),
-        displayMedium: GoogleFonts.playfairDisplay(
+        displaySmall: GoogleFonts.cormorantGaramond(
           fontSize: 24,
           fontWeight: FontWeight.bold,
           color: textColor,
         ),
-        bodyLarge: GoogleFonts.lato(
-          fontSize: 16,
+        headlineMedium: GoogleFonts.cormorantGaramond(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
           color: textColor,
         ),
-        bodyMedium: GoogleFonts.lato(
+        bodyLarge: GoogleFonts.montserrat(
+          fontSize: 16,
+          color: textColor,
+          height: 1.5,
+        ),
+        bodyMedium: GoogleFonts.montserrat(
           fontSize: 14,
           color: textColor,
+          height: 1.5,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,
+          elevation: 8,
+          shadowColor: primaryColor.withOpacity(0.4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          textStyle: GoogleFonts.lato(
+          textStyle: GoogleFonts.montserrat(
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            letterSpacing: 1.0,
           ),
         ),
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:salon_booking_app/core/theme/app_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,7 +13,7 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            _buildHeader(),
+            FadeInDown(duration: const Duration(milliseconds: 600), child: _buildHeader()),
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -19,7 +21,10 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSectionTitle("Nearest"),
+                    FadeInRight(
+                      delay: const Duration(milliseconds: 200),
+                      child: _buildSectionTitle("Nearest"),
+                    ),
                     const SizedBox(height: 20),
                     SizedBox(
                       height: 380, // Height for the large cards
@@ -28,24 +33,33 @@ class HomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         physics: const BouncingScrollPhysics(),
                         children: [
-                          _buildLargeServiceCard(
-                            image: "assets/services/facial.jpg",
-                            name: "Danica Schaefer",
-                            role: "Hairstylist",
-                            address: "2828 Newell Street",
+                          FadeInRight(
+                            delay: const Duration(milliseconds: 400),
+                            child: _buildLargeServiceCard(
+                              image: "assets/services/facial.jpg",
+                              name: "Danica Schaefer",
+                              role: "Hairstylist",
+                              address: "2828 Newell Street",
+                            ),
                           ),
                           const SizedBox(width: 20),
-                          _buildLargeServiceCard(
-                            image: "assets/services/haircut.jpg",
-                            name: "Daniella Doe",
-                            role: "Hair Specialist",
-                            address: "2829 Old Street",
+                          FadeInRight(
+                            delay: const Duration(milliseconds: 600),
+                            child: _buildLargeServiceCard(
+                              image: "assets/services/haircut.jpg",
+                              name: "Daniella Doe",
+                              role: "Hair Specialist",
+                              address: "2829 Old Street",
+                            ),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 30),
-                    _buildSectionTitle("Popular Services"),
+                    FadeInLeft(
+                      delay: const Duration(milliseconds: 800),
+                      child: _buildSectionTitle("Popular Services"),
+                    ),
                      const SizedBox(height: 20),
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -57,10 +71,10 @@ class HomeScreen extends StatelessWidget {
                           mainAxisSpacing: 15,
                           childAspectRatio: 0.8,
                           children: [
-                            _buildSmallServiceCard("Facial", "assets/services/facial.jpg"),
-                             _buildSmallServiceCard("Manicure", "assets/services/manicure.jpg"),
-                              _buildSmallServiceCard("Makeup", "assets/services/makeup.jpg"),
-                               _buildSmallServiceCard("Haircut", "assets/services/haircut.jpg"),
+                             FadeInUp(delay: const Duration(milliseconds: 900), child: _buildSmallServiceCard("Facial", "assets/services/facial.jpg")),
+                             FadeInUp(delay: const Duration(milliseconds: 1000), child: _buildSmallServiceCard("Manicure", "assets/services/manicure.jpg")),
+                              FadeInUp(delay: const Duration(milliseconds: 1100), child: _buildSmallServiceCard("Makeup", "assets/services/makeup.jpg")),
+                               FadeInUp(delay: const Duration(milliseconds: 1200), child: _buildSmallServiceCard("Haircut", "assets/services/haircut.jpg")),
                           ],
                         ),
                     ),
@@ -93,7 +107,7 @@ class HomeScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: const BoxDecoration(
-        color: Colors.transparent, // Or a dark background if matching reference exactly
+        color: Colors.transparent, 
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,9 +118,10 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   "Jan, 31",
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.montserrat(
                     fontSize: 14,
-                    color: Colors.grey[600], // Adjust based on background
+                    color: Colors.grey[600],
+                    letterSpacing: 1
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -138,9 +153,7 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Text(
         title,
-        style: GoogleFonts.playfairDisplay(
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
+        style: AppTheme.lightTheme.textTheme.headlineMedium?.copyWith(
           color: Colors.black,
         ),
       ),
@@ -189,9 +202,8 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                        style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
+                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -220,7 +232,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                 Icon(Icons.arrow_forward, color: AppTheme.primaryColor),
+                 Icon(Icons.arrow_forward_ios, size: 18, color: AppTheme.primaryColor),
               ],
             ),
           ),
@@ -259,9 +271,8 @@ class HomeScreen extends StatelessWidget {
             child: Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
               ),
             ),
           ),
