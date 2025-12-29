@@ -25,37 +25,28 @@ class HomeScreen extends StatelessWidget {
                       delay: const Duration(milliseconds: 200),
                       child: _buildSectionTitle("Nearest"),
                     ),
-                    const SizedBox(height: 20),
                     SizedBox(
-                      height: 380, // Height for the large cards
-                      child: ListView(
+                      height: 400, // Increased height to accommodate shadow
+                      child: ListView.builder(
+                        itemCount: _consultants.length,
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         physics: const BouncingScrollPhysics(),
-                        children: [
-                          FadeInRight(
-                            delay: const Duration(milliseconds: 400),
+                        itemBuilder: (context, index) {
+                          final consultant = _consultants[index];
+                          return FadeInRight(
+                            delay: Duration(milliseconds: 200 * (index + 1)),
                             child: _buildLargeServiceCard(
-                              image: "assets/services/facial.jpg",
-                              name: "Danica Schaefer",
-                              role: "Hairstylist",
-                              address: "2828 Newell Street",
+                              image: consultant["image"]!,
+                              name: consultant["name"]!,
+                              role: consultant["role"]!,
+                              address: consultant["address"]!,
                             ),
-                          ),
-                          const SizedBox(width: 20),
-                          FadeInRight(
-                            delay: const Duration(milliseconds: 600),
-                            child: _buildLargeServiceCard(
-                              image: "assets/services/haircut.jpg",
-                              name: "Daniella Doe",
-                              role: "Hair Specialist",
-                              address: "2829 Old Street",
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 10),
                     FadeInLeft(
                       delay: const Duration(milliseconds: 800),
                       child: _buildSectionTitle("Popular Services"),
@@ -160,6 +151,34 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+
+  final List<Map<String, String>> _consultants = [
+    {
+      "image": "assets/services/facial.jpg",
+      "name": "Annie Karim",
+      "role": "Hairstylist",
+      "address": "2828 Defence Phase 6",
+    },
+    {
+      "image": "assets/services/haircut.jpg",
+      "name": "Ayesha Khan",
+      "role": "Hair Specialist",
+      "address": "2829 Gulberg III",
+    },
+    {
+      "image": "assets/services/makeup.jpg",
+      "name": "Sana Ahmed",
+      "role": "Makeup Artist",
+      "address": "15 Block Y, DHA",
+    },
+     {
+      "image": "assets/services/manicure.jpg",
+      "name": "Zoya Ali",
+      "role": "Nail Technician",
+      "address": "10 Block C, Model Town",
+    },
+  ];
+
   Widget _buildLargeServiceCard({
     required String image,
     required String name,
@@ -168,14 +187,16 @@ class HomeScreen extends StatelessWidget {
   }) {
     return Container(
       width: 280,
+      margin: const EdgeInsets.only(right: 20, bottom: 20), // Added bottom margin for shadow
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+            color: AppTheme.primaryColor.withOpacity(0.15), // Slightly colored shadow for premium feel
+            blurRadius: 20,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -204,27 +225,33 @@ class HomeScreen extends StatelessWidget {
                         name,
                         style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
                            fontWeight: FontWeight.bold,
+                           color: Colors.black87, // Darker for better visibility
+                           fontSize: 18,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Text(
                         role,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w500,
+                          color: AppTheme.primaryColor, // Premium accent color
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                       const SizedBox(height: 8),
+                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          Icon(Icons.location_on, size: 14, color: Colors.grey[400]),
+                          Icon(Icons.location_on_rounded, size: 16, color: Colors.grey[400]),
                           const SizedBox(width: 4),
-                          Text(
-                            address,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[400],
+                          Expanded(
+                            child: Text(
+                              address,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey[600], // Darker grey for better visibility
+                              ),
                             ),
                           ),
                         ],
@@ -232,7 +259,14 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                 Icon(Icons.arrow_forward_ios, size: 18, color: AppTheme.primaryColor),
+                 Container(
+                   decoration: BoxDecoration(
+                     color: AppTheme.backgroundColor,
+                     shape: BoxShape.circle,
+                   ),
+                   padding: const EdgeInsets.all(8),
+                   child: Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppTheme.primaryColor)
+                 ),
               ],
             ),
           ),
@@ -240,6 +274,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
 
    Widget _buildSmallServiceCard(String title, String image) {
     return Container(
