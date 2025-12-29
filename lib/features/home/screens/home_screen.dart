@@ -152,7 +152,7 @@ class HomeScreen extends StatelessWidget {
   }
 
 
-  final List<Map<String, String>> _consultants = [
+  static const List<Map<String, String>> _consultants = [
     {
       "image": "assets/services/facial.jpg",
       "name": "Annie Karim",
