@@ -3,6 +3,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:salon_booking_app/core/theme/app_theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:salon_booking_app/features/home/screens/booking_detail_screen.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -37,6 +39,7 @@ class HomeScreen extends StatelessWidget {
                           return FadeInRight(
                             delay: Duration(milliseconds: 200 * (index + 1)),
                             child: _buildLargeServiceCard(
+                              context: context, // Passing context
                               image: consultant["image"]!,
                               name: consultant["name"]!,
                               role: consultant["role"]!,
@@ -117,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Hello, Alexa",
+                  "Hello, Anmol",
                   style: AppTheme.lightTheme.textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.black, // Dark text
@@ -152,11 +155,17 @@ class HomeScreen extends StatelessWidget {
   }
 
 
+
+
+// ... (in HomeScreen widget)
+
+// ...
+
   static const List<Map<String, String>> _consultants = [
     {
       "image": "assets/services/facial.jpg",
       "name": "Annie Karim",
-      "role": "Hairstylist",
+      "role": "Skin Specialist", // Fixed role to match Facial image
       "address": "2828 Defence Phase 6",
     },
     {
@@ -180,97 +189,118 @@ class HomeScreen extends StatelessWidget {
   ];
 
   Widget _buildLargeServiceCard({
+    required BuildContext context, // Added context for navigation
     required String image,
     required String name,
     required String role,
     required String address,
   }) {
-    return Container(
-      width: 280,
-      margin: const EdgeInsets.only(right: 20, bottom: 20), // Added bottom margin for shadow
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryColor.withOpacity(0.15), // Slightly colored shadow for premium feel
-            blurRadius: 20,
-            spreadRadius: 2,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-              child: Image.asset(
-                image,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BookingDetailScreen(
+              image: image,
+              name: name,
+              role: role,
+              address: address,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: AppTheme.lightTheme.textTheme.bodyLarge?.copyWith(
-                           fontWeight: FontWeight.bold,
-                           color: Colors.black87, // Darker for better visibility
-                           fontSize: 18,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        role,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.primaryColor, // Premium accent color
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                       const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Icon(Icons.location_on_rounded, size: 16, color: Colors.grey[400]),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              address,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey[600], // Darker grey for better visibility
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+        );
+      },
+      child: Container(
+        width: 280,
+        margin: const EdgeInsets.only(right: 20, bottom: 20, top: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.primaryColor.withOpacity(0.12),
+              blurRadius: 25,
+              spreadRadius: 2,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Hero( // Added Hero animation
+                tag: image,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+                  child: Image.asset(
+                    image,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                 Container(
-                   decoration: BoxDecoration(
-                     color: AppTheme.backgroundColor,
-                     shape: BoxShape.circle,
-                   ),
-                   padding: const EdgeInsets.all(8),
-                   child: Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppTheme.primaryColor)
-                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(22), // Increased padding
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: GoogleFonts.cormorantGaramond( // Changed to premium serif font
+                             fontWeight: FontWeight.w700, // Bold
+                             color: Colors.black,
+                             fontSize: 22, // Larger size
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          role,
+                          style: GoogleFonts.montserrat(
+                            fontSize: 13,
+                            color: AppTheme.primaryColor,
+                            fontWeight: FontWeight.bold, // Bolder
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                         const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Icon(Icons.location_on_rounded, size: 16, color: Colors.grey[400]),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                address,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                   Container(
+                     decoration: BoxDecoration(
+                       color: AppTheme.backgroundColor,
+                       shape: BoxShape.circle,
+                     ),
+                     padding: const EdgeInsets.all(10), // Larger touch target
+                     child: const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppTheme.primaryColor)
+                   ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
