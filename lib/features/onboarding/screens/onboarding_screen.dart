@@ -1,3 +1,4 @@
+-
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:salon_booking_app/core/theme/app_theme.dart';
@@ -58,6 +59,40 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             left: 0,
             right: 0,
             child: _buildBottomPanel(),
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: SafeArea(
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: _currentPage == _onboardingData.length - 1 ? 0.0 : 1.0,
+                child: IgnorePointer(
+                  ignoring: _currentPage == _onboardingData.length - 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Skip',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
