@@ -179,9 +179,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               (index) => _buildDot(index: index),
             ),
           ),
-          FadeInRight(
-            duration: const Duration(milliseconds: 500),
-            key: ValueKey(_currentPage), // Triggers animation on change
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            width: _currentPage == _onboardingData.length - 1 ? 200 : 70,
+            height: 70,
             child: ElevatedButton(
               onPressed: () {
                 if (_currentPage < _onboardingData.length - 1) {
@@ -199,15 +200,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(20),
-                backgroundColor: AppTheme.primaryColor, 
+                shape: _currentPage == _onboardingData.length - 1
+                    ? RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      )
+                    : const CircleBorder(),
+                padding: EdgeInsets.zero, // Let Container control size
+                backgroundColor: AppTheme.primaryColor,
                 foregroundColor: Colors.white,
               ),
-              child: Icon(
-                 _currentPage == _onboardingData.length - 1 ? Icons.check : Icons.arrow_forward,
-                 size: 28,
-              ),
+              child: _currentPage == _onboardingData.length - 1
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          "Get Started",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Icon(Icons.arrow_forward),
+                      ],
+                    )
+                  : const Icon(
+                      Icons.arrow_forward,
+                      size: 28,
+                    ),
             ),
           ),
         ],
