@@ -61,6 +61,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: _buildBottomPanel(),
           ),
           Positioned(
+            top: 50,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                "Luxe Salon",
+                style: AppTheme.lightTheme.textTheme.headlineMedium?.copyWith(
+                  color: Colors.white,
+                  letterSpacing: 1.2,
+                  shadows: [
+                    Shadow(
+                      offset: const Offset(0, 2),
+                      blurRadius: 4.0,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
             top: 0,
             right: 0,
             child: SafeArea(
@@ -236,14 +257,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildDot({required int index}) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.only(right: 8),
-      height: 8,
-      width: _currentPage == index ? 30 : 8,
-      decoration: BoxDecoration(
-        color: _currentPage == index ? AppTheme.primaryColor : Colors.white.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(4),
+    return GestureDetector(
+      onTap: () {
+        _pageController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        margin: const EdgeInsets.only(right: 8),
+        height: 8,
+        width: _currentPage == index ? 30 : 8,
+        decoration: BoxDecoration(
+          color: _currentPage == index
+              ? AppTheme.primaryColor
+              : Colors.white.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(4),
+        ),
       ),
     );
   }
