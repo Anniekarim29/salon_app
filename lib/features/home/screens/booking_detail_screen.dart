@@ -24,6 +24,7 @@ class BookingDetailScreen extends StatefulWidget {
 class _BookingDetailScreenState extends State<BookingDetailScreen> {
   int _selectedDateIndex = 0;
   int _selectedTimeIndex = 0;
+  bool _isFavorite = false;
 
   final List<String> _dates = ["Today", "Tomorrow", "Wed", "Thu", "Fri"];
   final List<String> _times = ["10:00 AM", "11:30 AM", "01:00 PM", "03:30 PM", "05:00 PM"];
@@ -50,6 +51,46 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
               ),
               onPressed: () => Navigator.pop(context),
             ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: IconButton(
+                  icon: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      size: 20,
+                      color: _isFavorite ? Colors.red : Colors.black,
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isFavorite = !_isFavorite;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          _isFavorite
+                              ? "Added to favorites"
+                              : "Removed from favorites",
+                          style: GoogleFonts.montserrat(),
+                        ),
+                        backgroundColor: Colors.black,
+                        duration: const Duration(milliseconds: 1000),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
                 tag: widget.image,
