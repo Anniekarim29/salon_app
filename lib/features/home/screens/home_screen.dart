@@ -5,8 +5,18 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:salon_booking_app/features/home/screens/booking_detail_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+
+  final List<String> _categories = ["All", "Hair", "Makeup", "Skin", "Nails"];
+  int _selectedCategoryIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +33,11 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    FadeInRight(
+                      delay: const Duration(milliseconds: 100),
+                      child: _buildCategories(),
+                    ),
+                    const SizedBox(height: 20),
                     FadeInRight(
                       delay: const Duration(milliseconds: 200),
                       child: _buildSectionTitle("Nearest"),
@@ -80,6 +95,12 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
         backgroundColor: Colors.white,
         selectedItemColor: AppTheme.primaryColor,
         unselectedItemColor: Colors.grey[400],
@@ -129,15 +150,68 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppTheme.secondaryColor.withOpacity(0.3),
-              shape: BoxShape.circle,
+          InkWell(
+            onTap: () {
+               ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("No new notifications", style: GoogleFonts.montserrat()),
+                    backgroundColor: Colors.black,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                );
+            },
+            borderRadius: BorderRadius.circular(50),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppTheme.secondaryColor.withOpacity(0.3),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.notifications_outlined, color: Colors.black),
             ),
-            child: const Icon(Icons.notifications_outlined, color: Colors.black),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCategories() {
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        itemCount: _categories.length,
+        itemBuilder: (context, index) {
+          final isSelected = _selectedCategoryIndex == index;
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedCategoryIndex = index;
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.black : Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: isSelected ? Colors.black : Colors.grey.shade300,
+                ),
+              ),
+              child: Text(
+                _categories[index],
+                style: GoogleFonts.montserrat(
+                  color: isSelected ? Colors.white : Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
