@@ -5,6 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:salon_booking_app/features/home/screens/booking_detail_screen.dart';
 
+import 'package:salon_booking_app/features/shop/screens/shop_screen.dart';
+import 'package:salon_booking_app/features/chat/screens/chat_screen.dart';
+import 'package:salon_booking_app/features/settings/screens/settings_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -23,74 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       body: SafeArea(
-        child: Column(
+        child: IndexedStack(
+          index: _currentIndex,
           children: [
-            FadeInDown(duration: const Duration(milliseconds: 600), child: _buildHeader()),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FadeInRight(
-                      delay: const Duration(milliseconds: 100),
-                      child: _buildCategories(),
-                    ),
-                    const SizedBox(height: 20),
-                    FadeInRight(
-                      delay: const Duration(milliseconds: 200),
-                      child: _buildSectionTitle("Nearest"),
-                    ),
-                    SizedBox(
-                      height: 400, // Increased height to accommodate shadow
-                      child: ListView.builder(
-                        itemCount: _consultants.length,
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final consultant = _consultants[index];
-                          return FadeInRight(
-                            delay: Duration(milliseconds: 200 * (index + 1)),
-                            child: _buildLargeServiceCard(
-                              context: context, // Passing context
-                              image: consultant["image"]!,
-                              name: consultant["name"]!,
-                              role: consultant["role"]!,
-                              address: consultant["address"]!,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    FadeInLeft(
-                      delay: const Duration(milliseconds: 800),
-                      child: _buildSectionTitle("Popular Services"),
-                    ),
-                     const SizedBox(height: 20),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: GridView.count(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 15,
-                          mainAxisSpacing: 15,
-                          childAspectRatio: 0.8,
-                          children: [
-                             FadeInUp(delay: const Duration(milliseconds: 900), child: _buildSmallServiceCard("Facial", "assets/services/facial.jpg")),
-                             FadeInUp(delay: const Duration(milliseconds: 1000), child: _buildSmallServiceCard("Manicure", "assets/services/manicure.jpg")),
-                              FadeInUp(delay: const Duration(milliseconds: 1100), child: _buildSmallServiceCard("Makeup", "assets/services/makeup.jpg")),
-                               FadeInUp(delay: const Duration(milliseconds: 1200), child: _buildSmallServiceCard("Haircut", "assets/services/haircut.jpg")),
-                          ],
-                        ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            _buildHomeContent(),
+            const ShopScreen(),
+            const ChatScreen(),
+            const SettingsScreen(),
           ],
         ),
       ),
@@ -115,6 +58,79 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.settings_outlined), label: "Settings"),
         ],
       ),
+    );
+  }
+
+  Widget _buildHomeContent() {
+    return Column(
+      children: [
+        FadeInDown(duration: const Duration(milliseconds: 600), child: _buildHeader()),
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FadeInRight(
+                  delay: const Duration(milliseconds: 100),
+                  child: _buildCategories(),
+                ),
+                const SizedBox(height: 20),
+                FadeInRight(
+                  delay: const Duration(milliseconds: 200),
+                  child: _buildSectionTitle("Nearest"),
+                ),
+                SizedBox(
+                  height: 400, // Increased height to accommodate shadow
+                  child: ListView.builder(
+                    itemCount: _consultants.length,
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final consultant = _consultants[index];
+                      return FadeInRight(
+                        delay: Duration(milliseconds: 200 * (index + 1)),
+                        child: _buildLargeServiceCard(
+                          context: context, // Passing context
+                          image: consultant["image"]!,
+                          name: consultant["name"]!,
+                          role: consultant["role"]!,
+                          address: consultant["address"]!,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                FadeInLeft(
+                  delay: const Duration(milliseconds: 800),
+                  child: _buildSectionTitle("Popular Services"),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                    childAspectRatio: 0.8,
+                    children: [
+                      FadeInUp(delay: const Duration(milliseconds: 900), child: _buildSmallServiceCard("Facial", "assets/services/facial.jpg")),
+                      FadeInUp(delay: const Duration(milliseconds: 1000), child: _buildSmallServiceCard("Manicure", "assets/services/manicure.jpg")),
+                      FadeInUp(delay: const Duration(milliseconds: 1100), child: _buildSmallServiceCard("Makeup", "assets/services/makeup.jpg")),
+                      FadeInUp(delay: const Duration(milliseconds: 1200), child: _buildSmallServiceCard("Haircut", "assets/services/haircut.jpg")),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
